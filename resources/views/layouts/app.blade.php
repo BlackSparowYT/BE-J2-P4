@@ -1,36 +1,59 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <?php vel_set_social_meta() ?>
+        <?php vel_set_page_meta() ?>
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <link rel="stylesheet" href="/css/toastr.css">
+        <link rel="stylesheet" href="/css/core.css">
+        <link rel="stylesheet" href="/css/account.css">
+        <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="/js/toastr.js"></script>
+
+        <script>
+            toastr.options = {
+                "positionClass": "toast-top-right",
+                "timeOut": "5000",
+                "extendedTimeOut": "5000",
+                "preventDuplicates": true,
+                "toastrTextFontFamily": "Poppins",
+                "progressBar": true,
+            };
+        </script>
+
+
+        {{--
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+            <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+        --}}
+
+        {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-YBKBS0EKY7"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-YBKBS0EKY7');
+        </script> --}}
+
+        @yield('head')
+
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
+    <body class="show-nav-@yield('show-nav', 'true')">
+        @include('components.navbar')
+        @yield('content')
 
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+        <div class="vel-toast">
+            <script>
+                {!! !empty(session()->get('success')) ? 'toastr.success("'.session()->get('success').'");' : '' !!}
+                {!! !empty(session()->get('info')) ? 'toastr.info("'.session()->get('info').'");' : '' !!}
+                {!! !empty(session()->get('warning')) ? 'toastr.warning("'.session()->get('warning').'");' : '' !!}
+                {!! !empty(session()->get('error')) ? 'toastr.error("'.session()->get('error').'");' : '' !!}
+            </script>
         </div>
+
+
     </body>
 </html>
