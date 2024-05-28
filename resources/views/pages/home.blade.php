@@ -11,13 +11,7 @@
 @section('content')
 
 <main>
-    <section class="block block--header block--header-home">
-        <div class="container">
-            <div class="text">
-                <h1>{{ env('APP_NAME') }}</h1>
-            </div>
-        </div>
-    </section>
+    @include('components.blocks.header-home', ['args' => array('text' => '<h1>'.env('APP_NAME').'</h1>')])
 </main>
 
 @endsection

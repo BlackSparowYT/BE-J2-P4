@@ -45,7 +45,7 @@
         @include('components.navbar')
         @yield('content')
 
-        <div class="vel-toast">
+        <div class="vlx-toast">
             <script>
                 {!! !empty(session()->get('success')) ? 'toastr.success("'.session()->get('success').'");' : '' !!}
                 {!! !empty(session()->get('info')) ? 'toastr.info("'.session()->get('info').'");' : '' !!}
