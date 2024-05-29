@@ -135,6 +135,13 @@
         }
     }
 
+    if (! function_exists('vel_get_admin_url')) {
+        function vel_get_admin_url() {
+            $url = !empty(env('SETTING_ADMIN_URL')) ? env('SETTING_ADMIN_URL') : 'admin';
+            return vel_start_slash_it($url);
+        }
+    }
+
     if (! function_exists('vel_get_app_domain')) {
         function vel_get_app_domain() {
             $domain = env('APP_DOMAIN');
@@ -169,6 +176,22 @@
             $string = str_replace('-', ' ', $string);
             $string = ucwords($string);
             return $string;
+        }
+    }
+
+    if (! function_exists('vlx_format_route_name')) {
+        function vlx_make_uuid() {
+            // Generate 16 bytes (128 bits) of random data or use the data passed into the function.
+            $data = random_bytes(16);
+            assert(strlen($data) == 16);
+
+            // Set version to 0100
+            $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+            // Set bits 6-7 to 10
+            $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+
+            // Output the 36 character UUID.
+            return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
         }
     }
 

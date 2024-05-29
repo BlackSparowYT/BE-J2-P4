@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid as UUID;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -28,13 +29,13 @@ class UserFactory extends Factory
         $email = vel_emailfy($name);
 
         return [
+            'uuid' => UUID::uuid4()->toString(),
             'name' => $name,
             'email' => $email,
             'password' => Hash::make('password123'),
             'blocked' => false,
             'verified' => false,
             'admin' => false,
-            'permissions' => null,
             'remember_token' => Str::random(10),
         ];
     }

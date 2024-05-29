@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Item;
+//use App\Models\Item;
 
 class ItemController extends Controller
 {
 
-    public function create() {
+    /* public function create() {
         return view('pages.account.menu-edit', ['mode' => 'add']);
     }
 
@@ -31,7 +31,6 @@ class ItemController extends Controller
                 'category' => 'required',
                 'content' => 'required',
                 'excerpt' => 'required',
-                //'media' => 'required|file|mimes:jpeg,png,jpg,gif,svg' //|max:2048
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->with('error', 'A field did not meet the requirements')->withInput();
@@ -49,9 +48,6 @@ class ItemController extends Controller
             'content' => $validated['content'],
         ]);
 
-        // Add the item to the media (WIP)
-        //$item->addMediaFromRequest($request['media'])->toMediaCollection('media');
-
         return redirect()->route('dashboard.menu')->with('success', 'Item has been added');
 
     }
@@ -66,7 +62,6 @@ class ItemController extends Controller
                 'category' => 'required',
                 'content' => 'required',
                 'excerpt' => 'required',
-                //'media' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg'
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->with('error', 'A field did not meet the requirements')->withInput();
@@ -84,13 +79,6 @@ class ItemController extends Controller
             'content' => $validated['content'],
         ]);
 
-        // Add the media to the item (WIP)
-        /* if(isset($request['media'])) {
-            $item->clearMediaCollection('media');
-            $item->addMediaFromRequest($request['media'])->toMediaCollection('media');
-            dd($item->getMedia());
-        } */
-
         return redirect()->route('dashboard.menu')->with('success', 'Item has been updated');
 
     }
@@ -102,6 +90,6 @@ class ItemController extends Controller
 
         return redirect()->route('dashboard.menu')->with('success', 'Item has been deleted');
 
-    }
+    } */
 
 }

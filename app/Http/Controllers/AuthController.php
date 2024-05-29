@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Ramsey\Uuid\Uuid as UUID;
 
 class AuthController extends Controller
 {
@@ -34,13 +35,13 @@ class AuthController extends Controller
 
         // Create the user
         $user = User::create([
+            'uuid' => UUID::uuid4()->toString(),
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'admin' => null,
             'blocked' => null,
             'verified' => null,
-            'permissions' => null,
         ]);
 
         // Redirect to the login page

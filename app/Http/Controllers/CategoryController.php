@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Category;
-use COM;
+//use App\Models\Category;
 
 class CategoryController extends Controller
 {
 
-    public function create() {
+    /* public function create() {
         return view('pages.account.categories-edit', ['mode' => 'add']);
     }
 
@@ -78,6 +77,6 @@ class CategoryController extends Controller
 
         return redirect()->route('dashboard.category')->with('success', 'Category has been deleted');
 
-    }
+    } */
 
 }

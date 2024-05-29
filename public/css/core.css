@@ -631,6 +631,12 @@ footer .block-2 a img { width: 40px; height: 40px; }
 
 
 
+.vlx-game {}
+.vlx-game.vlx-game--classic .inner.game { grid-template-columns: repeat(5, minmax(0,1fr)); }
+
+
+
+
 
 
 /*** Cards ***/
