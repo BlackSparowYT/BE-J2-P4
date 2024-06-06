@@ -42,7 +42,7 @@ class ItemController extends Controller
         // Create the item
         $item = Item::create([
             'title' => $validated['title'],
-            'slug' => vel_slugify($validated['slug']),
+            'slug' => vlx_slugify($validated['slug']),
             'category_id' => $validated['category'],
             'excerpt' => $validated['excerpt'],
             'content' => $validated['content'],
@@ -73,7 +73,7 @@ class ItemController extends Controller
         // Update the item
         $item->update([
             'title' => $validated['title'],
-            'slug' => vel_slugify($validated['slug']),
+            'slug' => vlx_slugify($validated['slug']),
             'category_id' => $validated['category'],
             'excerpt' => $validated['excerpt'],
             'content' => $validated['content'],

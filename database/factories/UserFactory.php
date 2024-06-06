@@ -26,7 +26,7 @@ class UserFactory extends Factory
     {
 
         $name = $this->faker->name();
-        $email = vel_emailfy($name);
+        $email = vlx_emailfy($name);
 
         return [
             'uuid' => UUID::uuid4()->toString(),
