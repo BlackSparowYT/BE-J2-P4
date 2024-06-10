@@ -35,7 +35,6 @@ class AuthController extends Controller
 
         // Create the user
         $user = User::create([
-            'uuid' => UUID::uuid4()->toString(),
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
@@ -70,8 +69,13 @@ class AuthController extends Controller
         // Clear any previous errors
         $request->session()->forget(['errors', 'success', 'info', 'warning']);
 
+        /* if (auth()->attempt($request->only('email', 'password'), $request->remember)) {
+            return redirect()->route('dashboard.main')->with('success', 'Login successful');
+        } */
+
         // Attempt to authenticate the user
         if (Auth::attempt($validated)) {
+            dd(redirect()->route('dashboard.main')->with('success', 'Login successful'));
             // Redirect to the dashboard
             return redirect()->route('dashboard.main')->with('success', 'Login successful');
         }
