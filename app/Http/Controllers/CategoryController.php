@@ -39,7 +39,7 @@ class CategoryController extends Controller
         // Create the cateogory
         $category = Category::create([
             'title' => $validated['title'],
-            'slug' => vel_slugify($validated['slug']),
+            'slug' => vlx_slugify($validated['slug']),
         ]);
 
         return redirect()->route('dashboard.category')->with('success', 'Category has been added');
@@ -64,7 +64,7 @@ class CategoryController extends Controller
         // Update the category
         $category->update([
             'title' => $validated['title'],
-            'slug' => vel_slugify($validated['slug']),
+            'slug' => vlx_slugify($validated['slug']),
         ]);
 
         return redirect()->route('dashboard.category')->with('success', 'Category has been updated');

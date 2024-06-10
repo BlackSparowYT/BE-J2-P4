@@ -1,8 +1,14 @@
 <?php
 
 
-    if (! function_exists('vel_set_page_meta')) {
-        function vel_set_page_meta($custom = null) {
+
+
+    // Format
+    /**
+     * Set meta data for a page
+     */
+    if (! function_exists('vlx_set_page_meta')) {
+        function vlx_set_page_meta($custom = null) {
             global $site;
             if ($custom) {
                 echo "<meta name='description' content='$custom'>";
@@ -16,9 +22,11 @@
             ';
         }
     }
-
-    if (! function_exists('vel_set_social_meta')) {
-        function vel_set_social_meta() {
+    /**
+     * Set meta data for a page that is used by socials
+     */
+    if (! function_exists('vlx_set_social_meta')) {
+        function vlx_set_social_meta() {
             echo '
                 <meta property="og:title" content="' . env("APP_NAME") . '">
                 <meta property="og:description" content="'. env("APP_DESCRIPTION") .'">
@@ -35,123 +43,179 @@
 
 
 
-    if (! function_exists('vel_site_lang')) {
-        //vel_site_lang();
-        function vel_site_lang() {
-            if(isset($_COOKIE['site_lang'])) {
-                return;
-            }
 
-            $location = strtolower(vel_get_user_location());
+    // Format
+    /**
+     * Format a string (remove underscores and semicolons)
+     */
+    if (! function_exists('vlx_format')) {
+        function vlx_format($string) {
 
-            if ($location == 'nl') {
-                setcookie('site_lang', 'nl', time() + (86400 * 30), "/"); // 86400 = 1 day * 30 (1 month)
-            } else {
-                setcookie('site_lang', 'en', time() + (86400 * 30), "/"); // 86400 = 1 day * 30 (1 month)
-            }
+            if(str_contains($string, '_')) { $string = str_replace('_', ' ', $string); }
+            if(str_contains($string, ';')) { $string = str_replace(';', '', $string); }
 
-            header("Refresh:0");
+            return $string;
+
         }
     }
 
-
-    if (! function_exists('vel_get_user_location')) {
-        function vel_get_user_location() {
-            /* return 'nl'; */
-
-            $ipaddress = '';
-            if (isset($_SERVER['HTTP_CLIENT_IP'])) {
-                $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-            } else if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            } else if (isset($_SERVER['HTTP_X_FORWARDED'])) {
-                $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-            } else if (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
-                $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-            } else if (isset($_SERVER['HTTP_FORWARDED'])) {
-                $ipaddress = $_SERVER['HTTP_FORWARDED'];
-            } else if (isset($_SERVER['REMOTE_ADDR'])) {
-                $ipaddress = $_SERVER['REMOTE_ADDR'];
-            } else {
-                $ipaddress = '1.1.1.1';
-            }
-
-            if ($ipaddress == "127.0.0.1") {
-                return "nl";
-            }
-
-            $json = json_decode(file_get_contents("http://ipinfo.io/$ipaddress/json"), true);
-            return $json['country'];
-        }
-    }
-
-
-
-
-
-    if (! function_exists('vel_number_format')) {
-        function vel_number_format($input, $decimals){
+    /**
+     * Format a number
+     */
+    if (! function_exists('vlx_number_format')) {
+        function vlx_number_format($input, $decimals){
             return number_format($input, $decimals, '.', ',');
         }
     }
 
-    if (! function_exists('vel_slugify')) {
-        function vel_slugify($string) {
+    /**
+     * Format a route name
+     */
+    if (! function_exists('vlx_format_route_name')) {
+        function vlx_format_route_name($string) {
+
+            $string = explode('.', $string)[0];
+            $string = str_replace('-', ' ', $string);
+            $string = ucwords($string);
+
+            return $string;
+
+        }
+    }
+
+
+
+
+    // Make something from something
+    /**
+     * Slugify a string
+     */
+    if (! function_exists('vlx_slugify')) {
+        function vlx_slugify($string) {
             return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $string), '-'));
         }
     }
 
-    if (! function_exists('vel_emailfy')) {
-        function vel_emailfy($name) {
+    /**
+     * Emailfy a name
+     */
+    if (! function_exists('vlx_emailfy')) {
+        function vlx_emailfy($name) {
+
             $email = strtolower($name);
             $email = str_replace('.', '', $email);
             $email = str_replace(' ', '.', $email);
-            $email = $email . '@' . vel_get_app_domain();
+            $email = $email . '@' . vlx_get_app_domain();
+
             return $email;
+
         }
     }
 
-    if (! function_exists('vel_start_slash_it')) {
-        function vel_start_slash_it($string) {
+
+
+
+    // Slashes
+    /**
+     * Add a slash at the start of a string
+     */
+    if (! function_exists('vlx_start_slash_it')) {
+        function vlx_start_slash_it($string) {
+
             $string = trim($string, '/');
             $string = '/' . $string;
+
             return preg_replace('#/+#', '/', $string);
+
         }
     }
 
-    if (!function_exists('vel_end_slash_it')) {
-        function vel_end_slash_it($string)
-        {
+    /**
+     * Add a slash at the end of a string
+     */
+    if (!function_exists('vlx_end_slash_it')) {
+        function vlx_end_slash_it($string) {
+
             $string = rtrim($string, '/');
             $string .= '/';
+
             return preg_replace('#/+#', '/', $string);
+
         }
     }
 
-    if (! function_exists('vel_get_account_url')) {
-        function vel_get_account_url() {
+
+
+
+    // Route urls
+    /**
+     * Get the account url
+     */
+    if (! function_exists('vlx_get_account_url')) {
+        function vlx_get_account_url() {
+
             $url = !empty(env('SETTING_ACCOUNT_URL')) ? env('SETTING_ACCOUNT_URL') : 'account';
-            return vel_start_slash_it($url);
+            return vlx_start_slash_it($url);
+
         }
     }
 
-    if (! function_exists('vel_get_admin_url')) {
-        function vel_get_admin_url() {
+    /**
+     * Get the admin url
+     */
+    if (! function_exists('vlx_get_admin_url')) {
+        function vlx_get_admin_url() {
+
             $url = !empty(env('SETTING_ADMIN_URL')) ? env('SETTING_ADMIN_URL') : 'admin';
-            return vel_start_slash_it($url);
+            return vlx_start_slash_it($url);
+
         }
     }
 
-    if (! function_exists('vel_get_app_domain')) {
-        function vel_get_app_domain() {
+    /**
+     * Get the auth url
+     */
+    if (! function_exists('vlx_get_auth_url')) {
+        function vlx_get_auth_url() {
+            
+            $url = !empty(env('SETTING_AUTH_URL')) ? env('SETTING_AUTH_URL') : 'auth';
+            return vlx_start_slash_it($url);
+
+        }
+    }
+
+
+
+
+    // App domain
+    /**
+     * Get the domain of the app
+     */
+    if (! function_exists('vlx_get_app_domain')) {
+        function vlx_get_app_domain() {
+
             $domain = env('APP_DOMAIN');
             $domain = str_replace(['http:', 'https:', '/'], '', $domain);
+
             return $domain;
+
         }
     }
 
+
+
+
+    // Get shit from env
+    /**
+     * Get a string from the ENV file (unless it contains a "KEY", "API", "USERNAME", "PASS")
+     */
     if (! function_exists('vlx_get_env_string')) {
         function vlx_get_env_string($env_key) {
+
+            if(str_contains($env_key, 'KEY')) return null;
+            if(str_contains($env_key, 'API')) return null;
+            if(str_contains($env_key, 'USERNAME')) return null;
+            if(str_contains($env_key, 'PASS')) return null;
 
             $string = env($env_key);
             $string = vlx_format($string);
@@ -160,26 +224,15 @@
         }
     }
 
-    if (! function_exists('vlx_format')) {
-        function vlx_format($string) {
 
-            if(str_contains($string, '_')) { $string = str_replace('_', ' ', $string); }
-            if(str_contains($string, ';')) { $string = str_replace(';', '', $string); }
 
-            return $string;
-        }
-    }
 
-    if (! function_exists('vlx_format_route_name')) {
-        function vlx_format_route_name($string) {
-            $string = explode('.', $string)[0];
-            $string = str_replace('-', ' ', $string);
-            $string = ucwords($string);
-            return $string;
-        }
-    }
-
-    if (! function_exists('vlx_format_route_name')) {
+    // UUID (DEPRECATED)
+    /**
+     * Create a UUID (Universally Unique Identifier)
+     * @deprecated
+     */
+    if (! function_exists('vlx_make_uuid')) {
         function vlx_make_uuid() {
             // Generate 16 bytes (128 bits) of random data or use the data passed into the function.
             $data = random_bytes(16);

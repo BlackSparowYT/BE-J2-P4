@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <?php vel_set_social_meta() ?>
-        <?php vel_set_page_meta() ?>
+        <?php vlx_set_social_meta() ?>
+        <?php vlx_set_page_meta() ?>
 
         <link rel="stylesheet" href="/css/toastr.css">
         <link rel="stylesheet" href="/css/core.css">
@@ -10,8 +10,8 @@
         <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script src="/js/toastr.js"></script>
+        <script src="/js/jquery.min.js?v=3.7.1"></script>
+        <script src="/js/toastr.js?v=2.1.1"></script>
 
         <script>
             toastr.options = {
@@ -26,8 +26,8 @@
 
 
         {{--
-            <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
-            <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+            <link rel="stylesheet" href="/css/datatables.css?v=1.13.7" />
+            <script src="/js/datatables.js?v=1.13.7"></script>
         --}}
 
         {{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-YBKBS0EKY7"></script>

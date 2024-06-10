@@ -15,7 +15,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard/', fn() => redirect()->route('dashboard.main') );
 
     // Add a prefix
-    Route::group(['prefix' => vel_get_account_url()], function() {
+    Route::group(['prefix' => vlx_get_account_url()], function() {
 
         //Dashboard
         Route::group(['namespace' => 'auth_navbar'],function() {
