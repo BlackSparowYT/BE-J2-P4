@@ -38,12 +38,14 @@
                     </div>
                 </div>
             @else
-                <div class="inner game d-grid">
-                    @for ($i = 1; $i <= 6; $i++)
-                        @for ($j = 1; $j <= 5; $j++)
-                            <input class="try_{{ $i }} js-try-{{ $i }}" type="text" maxlength="1" disabled/>
+                <div class="inner">
+                    <div class="vlx-game-inputs d-grid">
+                        @for ($i = 1; $i <= 6; $i++)
+                            @for ($j = 1; $j <= 5; $j++)
+                                <input class="try_{{ $i }} js-try-{{ $i }}" type="text" maxlength="1" disabled/>
+                            @endfor
                         @endfor
-                    @endfor
+                    </div>
                 </div>
 
                 <div class="inner keyboard">
