@@ -5,11 +5,13 @@
         <?php vlx_set_page_meta() ?>
 
         <link rel="stylesheet" href="/css/toastr.css">
+        <link rel="stylesheet" href="/css/wordle.css">
         <link rel="stylesheet" href="/css/core.css">
         <link rel="stylesheet" href="/css/account.css">
         <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 
 
+        <script src="/js/app.js?v=1.0"></script>
         <script src="/js/jquery.min.js?v=3.7.1"></script>
         <script src="/js/toastr.js?v=2.1.1"></script>
 

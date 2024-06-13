@@ -1,0 +1,6 @@
+.game { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+.game input { width: 50px; height: 50px; text-align: center; font-size: 2em; }
+.game input.active { border: 2px solid blue; }
+.game .correct { background-color: green; color: white; }
+.game .present { background-color: yellow; color: black; }
+.game .absent { background-color: gray; color: white; }

@@ -10,6 +10,10 @@ class GameController extends Controller
         return view('pages.games.classic');
     }
 
+    public function classicPost() {
+        dd($_POST);
+    }
+
     public function long() {
         return view('pages.games.long');
     }

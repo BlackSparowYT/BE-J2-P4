@@ -18,8 +18,11 @@ Route::group(['prefix' => 'game'], function () {
     Route::get('/medium',   fn() => redirect()->route('game.classic') );
 
     Route::get('/short',    [GameController::class, 'short'])->name('game.short');
+    Route::post('/short',  [GameController::class, 'shortPost'])->name('game.clashortssic.post');
     Route::get('/classic',  [GameController::class, 'classic'])->name('game.classic');
+    Route::post('/classic',  [GameController::class, 'classicPost'])->name('game.classic.post');
     Route::get('/long',     [GameController::class, 'long'])->name('game.long');
+    Route::post('/long',  [GameController::class, 'longPost'])->name('game.long.post');
 
 
     // Multiplayer

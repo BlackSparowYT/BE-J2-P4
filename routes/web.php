@@ -44,3 +44,4 @@ Route::post('/contact', [ContactController::class, 'add'])->name('contact.add');
 include __DIR__.'/game.php';
 include __DIR__.'/auth.php';
 include __DIR__.'/account.php';
+include __DIR__.'/api.php';
