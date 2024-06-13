@@ -1,7 +1,41 @@
 .vlx-game .inner { display: flex; align-items: center; justify-content: center; }
 .vlx-game .vlx-game-inputs { display: grid; grid-template-columns: repeat(5, 50px); gap: 5px; }
-.vlx-game .vlx-game-inputs input { width: 50px; height: 50px; text-align: center; font-size: 2em; }
-.vlx-game .vlx-game-inputs input.active { border: 2px solid blue; }
-.vlx-game .vlx-game-inputs .correct { background-color: green; color: white; }
-.vlx-game .vlx-game-inputs .present { background-color: yellow; color: black; }
-.vlx-game .vlx-game-inputs .absent { background-color: gray; color: white; }
+.vlx-game .vlx-game-inputs input { width: 50px; height: 50px; text-align: center; font-size: 2em; border: 1px solid transparent; border-radius: 4px; }
+.vlx-game .vlx-game-inputs input.active { border: 2px solid var(--blue-300); }
+.vlx-game .vlx-game-inputs .correct { background-color: var(--green-500); color: var(--text-clr-invert); }
+.vlx-game .vlx-game-inputs .present { background-color: var(--orange-300); }
+.vlx-game .vlx-game-inputs .absent { background-color: var(--bg-clr-invert-light); color: var(--text-clr-invert); }
+
+.vlx-keyboard { margin-top: 20px; }
+.keyboard { margin: 0 8px; user-select: none; }
+.keyboard .row { display: flex; width: 100%; margin: 0 auto 8px; /* https://stackoverflow.com/questions/46167604/ios-html-disable-double-tap-to-zoom */ touch-action: manipulation; }
+
+.key {
+    font-family: 'nyt-franklin';
+    font-weight: bold;
+    border: 0;
+    padding: 0;
+    margin: 0 6px 0 0;
+    height: 58px;
+    width: 58px;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    background-color: var(--key-bg);
+    color: var(--key-text-color);
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.3);
+    background-color: var(--bg-clr-dark);
+}
+.key:last-of-type { margin: 0; }
+.key[data-state='correct'] { background-color: var(--key-bg-correct); color: var(--key-evaluated-text-color); }
+.key[data-state='present'] { background-color: var(--key-bg-present); color: var(--key-evaluated-text-color); }
+.key[data-state='absent'] { background-color: var(--key-bg-absent); color: var(--key-evaluated-text-color-absent); }
+.key.fade { transition: background-color 0.1s ease, color 0.1s ease; }
+
+.half { flex: 0.5; }
+.oneAndAHalf { flex: 1.5; }

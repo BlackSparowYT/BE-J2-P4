@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function focusNextInput() {
-        document.querySelectorAll('.vlx-game-inputs input').forEach(input => {
+        document.querySelectorAll('js-game-inputs input').forEach(input => {
             input.classList.remove('active');
         });
         let nextInput = getNextInput(currentRow, currentCol + 1);
