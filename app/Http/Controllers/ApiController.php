@@ -23,10 +23,25 @@ class ApiController extends Controller
     }
 
     public function checkLetterInWord($letter, $pos = null) {
+
+        $word = $this->getTodaysWord();
+
         if ($pos == null) {
-            //check if letter is in word
+            return  response()->json([
+                "result" => str_contains($word, $letter),
+            ], 200);
         } else if ($pos > 0 && $pos < 6) {
-            // check if letter is in right spot
+            $word_letters = str_split($word);
+            foreach ($word_letters as $key => $value) {
+                if ($value == $letter && $key == $pos - 1) {
+                    return response()->json([
+                        "result" => true,
+                    ], 200);
+                }
+            }
+            return response()->json([
+                "result" => false,
+            ], 200);
         } else {
             return response()->json([
                 "error" => "Invalid position",
