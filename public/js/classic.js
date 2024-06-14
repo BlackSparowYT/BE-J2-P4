@@ -62,6 +62,38 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+
+
+
+    async function updateKeyboard(guess) {
+        const keyboard = document.querySelector('.js-keyboard');
+        const keys = keyboard.querySelectorAll('.js-key');
+        const letters = guess.split('');
+
+        keys.forEach(async (key) => {
+            if(letters.includes(key.dataset.key)) {
+                key.disabled = true;
+                let wordletters = word.split('');
+        
+                for (let i = 0; i < 5; i++) {
+        
+                    let letterIsCorrect = await letterOnRightSpace(letters[i], i + 1);
+                    if (letterIsCorrect && key.dataset.key === letters[i]) {
+                        key.classList.add('correct');
+                    } else if (letterInWord(key.dataset.key)) {
+                        key.classList.add('present');
+                    } else {
+                        key.classList.add('absent');
+                    }
+                }
+            }
+        });
+    }
+
+
+
+
+
     async function checkGuess() {
         let guess = '';
         for (let i = 1; i <= 5; i++) {
@@ -69,6 +101,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         if (guess.length !== 5) return;
+
 
         if (guess === word) {
             alert("Congratulations! You've guessed the word!");
@@ -81,10 +114,13 @@ document.addEventListener("DOMContentLoaded", function() {
             document.cookie = `wordle_status=${data}; expires=${tomorrow}; path=/`;
             window.location.reload();
 
+
             return;
         }
 
         const validGuess = await checkIfValid(guess);
+
+        await updateKeyboard(guess);
 
 
 
@@ -114,8 +150,11 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+
+
+
     function focusNextInput() {
-        document.querySelectorAll('js-game-inputs input').forEach(input => {
+        document.querySelectorAll('.js-game-inputs input').forEach(input => {
             input.classList.remove('active');
         });
         let nextInput = getNextInput(currentRow, currentCol + 1);
@@ -124,6 +163,10 @@ document.addEventListener("DOMContentLoaded", function() {
             nextInput.classList.add('active');
         }
     }
+
+
+
+
 
     function handleKeyPress(event) {
         if(vlx_get_cookie_val('wordle_status') != 'win') {
@@ -149,7 +192,37 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+
     document.addEventListener('keydown', handleKeyPress);
 
     focusNextInput(); // Focus the first input on page load
 });
+
+
+
+
+
+
+
+
+
+
+
+
+async function letterOnRightSpace(letter, position) {
+    try {
+        const response = await fetch('/api/check-letter?letter=' + letter + '&position=' + position);
+        return await response.json();
+    } catch (error) {
+        return false;
+    }
+}
+
+async function letterInWord(letter) {
+    try {
+        const response = await fetch('/api/check-letter?letter=' + letter);
+        return await response.json();
+    } catch (error) {
+        return false;
+    }
+}
