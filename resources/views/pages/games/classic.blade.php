@@ -19,7 +19,6 @@
     if(!empty($cookie)) {
         $status = $cookie->status;
         $tries = $cookie->tries;
-        //dd($cookie->status);
     } else {
         $status = "playing";
     }
@@ -32,10 +31,16 @@
             @if ($status == "win" || $status == "lose")
                 <div class="inner">
                     <div class="vlx-text vlx-text--center">
-                        <h2>Congrats, you have won!</h2>
-                        <p>Come back tomorrow to play again</p>
-                        <p>The word was: <strong>{{ $word }}</strong></p>
-                        <p>You guessed it in <strong>{{ $tries }} {{ $tries > 1 ? "tries" : "try" }}</strong></p>
+                        @if ($status == "lose")
+                            <h2>Sorry, you have lost!</h2>
+                            <p>Come back tomorrow to play again</p>
+                            <p>The word was: <strong>{{ $word }}</strong></p>
+                        @else
+                            <h2>Congrats, you have won!</h2>
+                            <p>Come back tomorrow to play again</p>
+                            <p>The word was: <strong>{{ $word }}</strong></p>
+                            <p>You guessed it in <strong>{{ $tries }} {{ $tries > 1 ? "tries" : "try" }}</strong></p>
+                        @endif
                     </div>
                 </div>
             @else

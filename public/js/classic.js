@@ -46,11 +46,11 @@ async function checkGuess() {
         return;
     } else if (currentRow === 6) {
 
+        data.status = 'lose';
         fetch('/api/set-cookie/wordle_status/' + encodeURIComponent(JSON.stringify(data)));
 
         alert(`Game Over!`);
 
-        data.status = 'lose';
 
         // await sleep(1000);
         window.location.reload();
@@ -62,13 +62,17 @@ async function checkGuess() {
     const json = await fetch('/api/check-guess/' + guess);
     const response = await json.json();
 
+    if (response.result == "error") {
+        alert(response.message);
+        return;
+    }
+
     if (response.result == "win") {
 
+        data.status = 'win';
         fetch('/api/set-cookie/wordle_status/' + encodeURIComponent(JSON.stringify(data)));
 
         alert("Congratulations! You've guessed the word!");
-
-        data.status = 'win';
 
         // await sleep(1000);
         window.location.reload();
@@ -77,11 +81,11 @@ async function checkGuess() {
 
     } else if (response.result == "lose") {
 
+        data.status = 'lose';
         fetch('/api/set-cookie/wordle_status/' + encodeURIComponent(JSON.stringify(data)));
 
         alert("Game Over! You've run out of tries!");
 
-        data.status = 'lose';
 
         // await sleep(1000);
         window.location.reload();

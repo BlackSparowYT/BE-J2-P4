@@ -144,6 +144,21 @@ class ApiController extends Controller
         $apiKey = env('WORDNIK_API_KEY');
         $apiUrl = "https://api.wordnik.com/v4/word.json/{$word}/definitions?api_key={$apiKey}";
 
+
+        /**
+         * Bug where sometimes it will return invalid word
+         * Known words:
+         * - FRIES
+         * - FLIES
+         * - PRESS
+         *
+         * Solution:
+         *  - Make sure the text is not empty AND is set
+         *
+         * Found by: thornythorn
+         */
+
+
         try {
             $response = file_get_contents($apiUrl);
             $definitions = json_decode($response);
@@ -151,7 +166,7 @@ class ApiController extends Controller
             $validWord = false;
 
             foreach ($definitions as $definition) {
-                if ($definition->text != "" && $definition->text != null) {
+                if (isset($definition->text) && !empty($definition->text)) {
                     $validWord = true;
                     break;
                 }
@@ -159,7 +174,10 @@ class ApiController extends Controller
 
             return $validWord;
         } catch (Exception $error) {
-            return false;
+            return response()->json([
+                "result" => "error",
+                "message" => "An error occurred while checking the word.",
+            ], 500);
         }
     }
 }
