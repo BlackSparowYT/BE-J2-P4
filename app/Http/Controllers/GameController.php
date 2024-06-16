@@ -3,15 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 class GameController extends Controller
 {
     public function classic() {
-        return view('pages.games.classic');
-    }
-
-    public function classicPost() {
-        dd($_POST);
+        Artisan::call('word:fetch-daily');
+        $word = trim(Artisan::output());
+        return view('pages.games.classic', ['word' => $word]);
     }
 
     public function long() {

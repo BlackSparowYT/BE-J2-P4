@@ -13,14 +13,15 @@
 
 @php
 
-    if(isset($_COOKIE['wordle_status']) && !empty($_COOKIE['wordle_status'])) {
-        $cookie = json_decode($_COOKIE['wordle_status']);
+    $cookie = json_decode(request()->cookie("wordle_status")) ?? null;
 
+
+    if(!empty($cookie)) {
         $status = $cookie->status;
         $tries = $cookie->tries;
-        $word = $cookie->word;
+        //dd($cookie->status);
     } else {
-        $status = "play";
+        $status = "playing";
     }
 
 @endphp
@@ -28,10 +29,10 @@
 <main>
     <section class="vlx-game vlx-game--classic wst--large wsb--medium js-game js-game--classic">
         <div class="container">
-            @if ($status == "win" )
+            @if ($status == "win" || $status == "lose")
                 <div class="inner">
-                    <div class="wpb-text">
-                        <h2>You have won!</h2>
+                    <div class="vlx-text vlx-text--center">
+                        <h2>Congrats, you have won!</h2>
                         <p>Come back tomorrow to play again</p>
                         <p>The word was: <strong>{{ $word }}</strong></p>
                         <p>You guessed it in <strong>{{ $tries }} {{ $tries > 1 ? "tries" : "try" }}</strong></p>

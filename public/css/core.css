@@ -440,6 +440,13 @@ footer .block-2 a img { width: 40px; height: 40px; }
 .bg--invert-dark { background-color: var(--bg-clr-invert-dark); }
 
 
+/** Text **/
+.vlx-text * { text-align: start; }
+.vlx-text.vlx-text--start * { text-align: start; }
+.vlx-text.vlx-text--center * { text-align: center; }
+.vlx-text.vlx-text--end * { text-align: end; }
+
+
 /** Backgrounds **/
 .vlx-text p.width--small { max-width: 60% !important; }
 .vlx-text div p.width--small { max-width: 80% !important; }
