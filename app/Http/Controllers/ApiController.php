@@ -215,22 +215,51 @@ class ApiController extends Controller
     // Games
     public function checkGuessForGame($guess, $game_id) {
 
-        $word = $this->getTodaysWord(false);
-
         $game = Game::where('uuid', $game_id)->first();
         $word = $game->word;
 
         if ($guess == $word) {
 
             if ($game->won_user == 0) {
+
                 $game->won_user = auth()->user()->uuid;
                 $game->won_time = now()->toDateTimeString();
+
+                $users = json_decode($game->players);
+                foreach ($users as $user) {
+                    if ($user->uuid == auth()->user()->uuid) {
+                        $user->end_time = now()->toDateTimeString();
+                    }
+                }
+
+                $game->players = json_encode($users);
                 $game->save();
+
+                return response()->json([
+                    "result" => "win",
+                    "code" => 1
+                ], 200);
+
+            } else {
+
+
+                $users = json_decode($game->players);
+                foreach ($users as $user) {
+                    if ($user->uuid == auth()->user()->uuid) {
+                        $user->end_time = now()->toDateTimeString();
+                    }
+                }
+
+                $game->players = json_encode($users);
+                $game->save();
+
+                return response()->json([
+                    "result" => "win",
+                    "code" => 2
+                ], 200);
+
             }
 
-            return response()->json([
-                "result" => "win",
-            ], 200);
 
         } else {
 
@@ -314,5 +343,24 @@ class ApiController extends Controller
             ], 200);
 
         }
+    }
+
+    public function endGame($game_id) {
+        $game = Game::where('uuid', $game_id)->first();
+
+        $users = json_decode($game->players);
+        foreach ($users as $user) {
+            if ($user->uuid == auth()->user()->uuid) {
+                $user->end_time = now()->toDateTimeString();
+            }
+        }
+
+        $game->players = json_encode($users);
+        $game->save();
+
+        return response()->json([
+            "result" => "lose",
+            "code" => 3
+        ], 200);
     }
 }

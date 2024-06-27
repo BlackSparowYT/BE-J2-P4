@@ -255,10 +255,10 @@
 
 
 
-    function get_random_words(
+    function get_random_word(
         $min_len = 5,
         $max_len = 5,
-        $has_dictionary_def = true,
+        $has_dictionary_def = "true",
         $part_of_speech = "noun,verb,adjective",
         $max_corpus_count = -1,
         $min_dictionary_count = 1,
@@ -267,7 +267,7 @@
     ) {
         $apiUrl = "https://api.wordnik.com/v4/words.json/randomWord";
         $apiUrl .= "?hasDictionaryDef=$has_dictionary_def";
-        $apiUrl .= "&includePartOfSpeech=".urlencode($part_of_speech);
+        $apiUrl .= "&includePartOfSpeech=$part_of_speech";
         $apiUrl .= "&maxCorpusCount=$max_corpus_count";
         $apiUrl .= "&minDictionaryCount=$min_dictionary_count";
         $apiUrl .= "&maxDictionaryCount=$max_dictionary_count";
@@ -275,21 +275,26 @@
         $apiUrl .= "&maxLength=$max_len";
         $apiUrl .= "&api_key=".env('WORDNIK_API_KEY');
 
+        str_replace('&amp;', '', $apiUrl);
+
         $response = file_get_contents($apiUrl);
         $word = json_decode($response)->word;
 
-        if (str_contains($word, '-')) return get_random_words($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
-        if (str_contains($word, ' ')) return get_random_words($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
-        if (str_contains($word, '.')) return get_random_words($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
-        if (str_contains($word, ',')) return get_random_words($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
-        if (str_contains($word, ';')) return get_random_words($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
-        if (str_contains($word, ':')) return get_random_words($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
-        if (str_contains($word, '!')) return get_random_words($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
-        if (str_contains($word, '?')) return get_random_words($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
-        if (str_contains($word, '(')) return get_random_words($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
-        if (str_contains($word, ')')) return get_random_words($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
-        if (str_contains($word, '>')) return get_random_words($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
-        if (str_contains($word, '<')) return get_random_words($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
+
+        if (str_contains($word, '-')) return get_random_word($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
+        if (str_contains($word, ' ')) return get_random_word($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
+        if (str_contains($word, '.')) return get_random_word($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
+        if (str_contains($word, ',')) return get_random_word($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
+        if (str_contains($word, ';')) return get_random_word($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
+        if (str_contains($word, ':')) return get_random_word($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
+        if (str_contains($word, '!')) return get_random_word($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
+        if (str_contains($word, '?')) return get_random_word($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
+        if (str_contains($word, '(')) return get_random_word($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
+        if (str_contains($word, ')')) return get_random_word($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
+        if (str_contains($word, '>')) return get_random_word($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
+        if (str_contains($word, '<')) return get_random_word($min_len, $max_len, $has_dictionary_def, $part_of_speech, $max_corpus_count, $min_dictionary_count, $max_dictionary_count);
+
+        return $word;
 
     }
 

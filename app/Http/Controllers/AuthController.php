@@ -33,15 +33,18 @@ class AuthController extends Controller
         // Clear any previous errors
         $request->session()->forget(['errors', 'success', 'info', 'warning']);
 
-        // Create the user
-        $user = User::create([
+        $data = [
             'name' => $validated['name'],
+            'uuid' => UUID::uuid4()->toString(),
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'admin' => null,
             'blocked' => null,
             'verified' => null,
-        ]);
+        ];
+
+        // Create the user
+        $user = User::create($data);
 
         // Redirect to the login page
         return redirect()->route('login')->with('success', 'Registration successful');

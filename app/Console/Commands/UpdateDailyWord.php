@@ -17,7 +17,7 @@ class UpdateDailyWord extends Command
 
     public function handle()
     {
-        $word = get_random_words(5, 5);
+        $word = get_random_word(5, 5);
 
         DB::table('daily_word')->insert([
             'word' => $word,

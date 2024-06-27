@@ -49,16 +49,15 @@ class GameController extends Controller
         }
 
         $users[] = [
-            auth()->user()->uuid,
-            now()->toDateTimeString()
+            "uuid" => auth()->user()->uuid,
+            "start_time" => now()->toDateTimeString(),
+            "end_time" => "",
         ];
-
-
 
         // set a new game in the database
         $game = new Game;
         $game->uuid = UUID::uuid4()->toString();
-        $game->word = get_random_words(5, 5);
+        $game->word = get_random_word(5, 5);
         $game->players = json_encode($users);
         $game->guesses = json_encode([]);
         $game->save();
@@ -74,16 +73,34 @@ class GameController extends Controller
 
         $game = Game::where('uuid', $game_id)->first();
 
+        // Add player to the game
         $users = json_decode($game->players);
-        $users[] = [
-            auth()->user()->uuid,
-            now()->toDateTimeString()
-        ];
+
+        // First check if the player is there already though
+        $player_exists = false;
+        foreach ($users as $user) {
+            if ($user->uuid == auth()->user()->uuid) {
+                $player_exists = true;
+            }
+        }
+
+        // If the player is not there, add them
+        if (!$player_exists) {
+            $users[] = [
+                "uuid" => auth()->user()->uuid,
+                "start_time" => now()->toDateTimeString(),
+                "end_time" => "",
+            ];
+        }
 
         $game->players = json_encode($users);
+        $game->save();
 
         return view('pages.games.classic-mp-vs', ['game_id' => $game_id, 'status' => 'playing', 'game' => $game]);
     }
+
+
+
 
     public function no_mp_cp() {
         return view('pages.games.mp.classic.coop');

@@ -13,12 +13,15 @@
 
 @php
 
+    use App\Models\User;
+
     if (isset($game_id) && !empty($game_id) && $status != "waiting") {
 
         $cookie = json_decode(request()->cookie("wordle_status_" . $game_id)) ?? null;
 
         if(!empty($cookie)) {
             $status = $cookie->status;
+            $win_code = $cookie->code;
             $tries = $cookie->tries;
         } else {
             $status = "playing";
@@ -38,19 +41,42 @@
                     </div>
                 </div>
             @else
-                @if ($status == "win" || $status == "lose")
-                    <div class="inner">
+                @if (($status == "win" || $status == "lose") && in_array($win_code, [1,2,3]))
+                    <div class="inner d-flex d-flex--ver g-40">
                         <div class="vlx-text vlx-text--center">
-                            @if ($status == "lose")
-                                <h2>Sorry, you have lost!</h2>
-                                <p>Come back tomorrow to play again</p>
-                                <p>The word was: <strong>{{ $game->word }}</strong></p>
-                            @else
-                                <h2>Congrats, you have won!</h2>
-                                <p>Come back tomorrow to play again</p>
+                            @if ($win_code = 1)
+                                <h2>Congrats, you are the fastest!</h2>
+                                <p>You have guessed the word the fastest of all the players!</p>
                                 <p>The word was: <strong>{{ $game->word }}</strong></p>
                                 <p>You guessed it in <strong>{{ $tries }} {{ $tries > 1 ? "tries" : "try" }}</strong></p>
+                            @elseif ($win_code = 2)
+                                <h2>Congrats, you have guessed the word!</h2>
+                                <p>You have guessed the word, but you arent the fastest.</p>
+                                <p>The word was: <strong>{{ $game->word }}</strong></p>
+                                <p>You guessed it in <strong>{{ $tries }} {{ $tries > 1 ? "tries" : "try" }}</strong></p>
+                            @else
+                                <h2>Sorry, you have lost!</h2>
+                                <p>Start another game and you might guess it that time</p>
+                                <p>The word was: <strong>{{ $game->word }}</strong></p>
                             @endif
+                        </div>
+                        <div class="vlx-text vlx-text--center">
+                            <h2>Players</h2>
+                            @foreach (json_decode($game->players) as $user)
+                                @php
+                                    $user->name = User::where('uuid', $user->uuid)->first()->name;
+                                    $user->time_taken = strtotime($user->end_time) - strtotime($user->start_time);
+                                @endphp
+                                <p>
+                                    <strong>{{ $user->name }}</strong>
+                                    >
+                                    @if ($user->time_taken > 0)
+                                        {{ $user->time_taken }} {{ $user->time_taken > 1 ? "seconds" : "second" }}
+                                    @else
+                                        Not finished yet
+                                    @endif
+                                </p>
+                            @endforeach
                         </div>
                     </div>
                 @else
@@ -114,12 +140,6 @@
                     <script src="/js/wordle/classic-mp-vs.js"></script>
                 @endif
             @endif
-
-            <pre>
-            @php
-                print_r($game ?? null);
-            @endphp
-            </pre>
         </div>
     </section>
 </main>

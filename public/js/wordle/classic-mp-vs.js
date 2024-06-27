@@ -7,6 +7,7 @@ tomorrow = encodeURIComponent(tomorrow);
 
 let data = {
     status: null,
+    code: null,
     guesses: [],
     tries: currentRow,
 };
@@ -47,6 +48,8 @@ async function checkGuess() {
     } else if (currentRow === 6) {
 
         data.status = 'lose';
+        data.code = 3;
+        fetch('/api/end-game/' + game_id)
         fetch('/api/set-cookie/wordle_status_' + game_id + '/' + encodeURIComponent(JSON.stringify(data)));
 
         alert(`Game Over!`);
@@ -70,6 +73,7 @@ async function checkGuess() {
     if (response.result == "win") {
 
         data.status = 'win';
+        data.code = response.code;
         fetch('/api/set-cookie/wordle_status_' + game_id + '/' + encodeURIComponent(JSON.stringify(data)));
 
         alert("Congratulations! You've guessed the word!");
