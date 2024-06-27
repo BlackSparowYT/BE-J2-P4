@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Artisan;
 use Exception;
 use Illuminate\Http\Response;
+use App\Models\Game; // Add this line to import the 'Game' class
 
 class ApiController extends Controller
 {
@@ -88,6 +89,20 @@ class ApiController extends Controller
 
             }
 
+            $guess_state = [];
+
+            for($i = 0; $i <= count($word_letters) -1; $i++) {
+
+                if ($word_letters[$i] == $guess_letters[$i]) {
+                    $guess_state[] = "correct";
+                } else if (in_array($guess_letters[$i], $word_letters)) {
+                    $guess_state[] = "present";
+                } else {
+                    $guess_state[] = "absent";
+                }
+
+            }
+
             for($i = 0; $i <= count($word_letters) -1; $i++) {
 
                 if ($word_letters[$i] == $guess_letters[$i]) {
@@ -119,6 +134,7 @@ class ApiController extends Controller
 
             return response()->json([
                 "result" => "valid",
+                "guess" => $guess_state,
                 "keyboard" => $keyboard_state,
             ], 200);
 
@@ -178,6 +194,125 @@ class ApiController extends Controller
                 "result" => "error",
                 "message" => "An error occurred while checking the word.",
             ], 500);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Games
+    public function checkGuessForGame($guess, $game_id) {
+
+        $word = $this->getTodaysWord(false);
+
+        $game = Game::where('uuid', $game_id)->first();
+        $word = $game->word;
+
+        if ($guess == $word) {
+
+            if ($game->won_user == 0) {
+                $game->won_user = auth()->user()->uuid;
+                $game->won_time = now()->toDateTimeString();
+                $game->save();
+            }
+
+            return response()->json([
+                "result" => "win",
+            ], 200);
+
+        } else {
+
+            $word_letters = str_split($word);
+            $guess_letters = str_split($guess);
+
+            if (count($word_letters) != count($guess_letters)) {
+
+                return response()->json([
+                    "result" => "invalid",
+                    "message" => "Word length does not match.",
+                ], 200);
+
+            } else if (!$this->checkValidWord($guess)) {
+
+                return response()->json([
+                    "result" => "invalid",
+                    "message" => "Invalid word.",
+                ], 200);
+
+            }
+
+            $guess_state = [];
+
+            for($i = 0; $i <= count($word_letters) -1; $i++) {
+
+                if ($word_letters[$i] == $guess_letters[$i]) {
+                    $guess_state[] = "correct";
+                } else if (in_array($guess_letters[$i], $word_letters)) {
+                    $guess_state[] = "present";
+                } else {
+                    $guess_state[] = "absent";
+                }
+
+            }
+
+            for($i = 0; $i <= count($word_letters) -1; $i++) {
+
+                if ($word_letters[$i] == $guess_letters[$i]) {
+                    $correct_letters[] = $guess_letters[$i];
+                } else if (in_array($guess_letters[$i], $word_letters)) {
+                    $present_letters[] = $guess_letters[$i];
+                } else {
+                    $missing_letters[] = $guess_letters[$i];
+                }
+
+            }
+
+            $keyboard = range('a', 'z');
+            $keyboard_state = [];
+
+            foreach ($keyboard as $letter) {
+
+                if (!empty($correct_letters) && in_array($letter, $correct_letters)) {
+                    $keyboard_state[$letter] = "correct";
+                } else if (!empty($present_letters) && in_array($letter, $present_letters)) {
+                    $keyboard_state[$letter] = "present";
+                } else if (!empty($missing_letters) && in_array($letter, $missing_letters)) {
+                    $keyboard_state[$letter] = "absent";
+                } else {
+                    $keyboard_state[$letter] = "default";
+                }
+
+            }
+
+            $guesses = json_decode($game->guesses, true);
+
+            if (isset($guesses[auth()->user()->uuid])) {
+                $guesses[auth()->user()->uuid][] = $guess;
+            } else {
+                $guesses[auth()->user()->uuid] = [$guess];
+            }
+
+            $game->guesses = json_encode($guesses);
+            $game->save();
+
+            return response()->json([
+                "result" => "valid",
+                "guess" => $guess_state,
+                "keyboard" => $keyboard_state,
+            ], 200);
+
         }
     }
 }

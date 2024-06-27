@@ -20,7 +20,11 @@
             </div>
         </a>
         <div class="form">
-            <form method="post" action="{{ route('login.post') }}">
+            @if (!empty(request()->query('return')))
+                <form method="post" action="{{ route('login.post', ["return" => request()->query('return')]) }}">
+            @else
+                <form method="post" action="{{ route('login.post') }}">
+            @endif
                 @csrf
                 <h2>Login</h2>
                 <div class="link">

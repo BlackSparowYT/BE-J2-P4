@@ -53,4 +53,13 @@ class User extends Authenticatable
     public function isVerified() {
         return $this->verified === 1;
     }
+
+    public function getFriends() {
+        return $this->hasMany(User::class, 'friend_ids');
+    }
+
+    public function addFriend(User $user) {
+        $this->friend_ids .= $user->id.",";
+        $this->save();
+    }
 }

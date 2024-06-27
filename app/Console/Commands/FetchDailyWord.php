@@ -20,7 +20,8 @@ class FetchDailyWord extends Command
     {
         $latestWord = DB::table('daily_word')->orderBy('id', 'desc')->first();
 
-        if (strtotime($latestWord->created_at) < strtotime('today')) {
+
+        if (empty($latestWord) || strtotime($latestWord->created_at) < strtotime('today')) {
             Artisan::call('word:update-daily');
             $latestWord = DB::table('daily_word')->orderBy('id', 'desc')->first();
         }

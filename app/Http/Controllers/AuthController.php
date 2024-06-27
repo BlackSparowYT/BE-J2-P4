@@ -76,7 +76,13 @@ class AuthController extends Controller
         // Attempt to authenticate the user
         if (Auth::attempt($validated)) {
             // Redirect to the dashboard
+
+            if($request->query('return')) {
+                return redirect(urldecode($request->query('return')))->with('success', 'Login successful');
+                exit();
+            }
             return redirect()->route('dashboard.main')->with('success', 'Login successful');
+            exit();
         }
 
         // Authentication failed, redirect back with error message

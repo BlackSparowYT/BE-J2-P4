@@ -97,7 +97,7 @@
                     </div>
                 </div>
 
-                <script src="/js/classic.js"></script>
+                <script src="/js/wordle/classic.js"></script>
             @endif
         </div>
     </section>

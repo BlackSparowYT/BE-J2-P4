@@ -47,7 +47,7 @@ async function checkGuess() {
     } else if (currentRow === 6) {
 
         data.status = 'lose';
-        fetch('/api/set-cookie/wordle_status/' + encodeURIComponent(JSON.stringify(data)));
+        fetch('/api/set-cookie/wordle_status_' + game_id + '/' + encodeURIComponent(JSON.stringify(data)));
 
         alert(`Game Over!`);
 
@@ -59,7 +59,7 @@ async function checkGuess() {
 
     }
 
-    const json = await fetch('/api/check-guess/' + guess);
+    const json = await fetch('/api/check-guess-for-game/' + guess + "/" + game_id);
     const response = await json.json();
 
     if (response.result == "error") {
@@ -70,7 +70,7 @@ async function checkGuess() {
     if (response.result == "win") {
 
         data.status = 'win';
-        fetch('/api/set-cookie/wordle_status/' + encodeURIComponent(JSON.stringify(data)));
+        fetch('/api/set-cookie/wordle_status_' + game_id + '/' + encodeURIComponent(JSON.stringify(data)));
 
         alert("Congratulations! You've guessed the word!");
 
@@ -82,7 +82,7 @@ async function checkGuess() {
     } else if (response.result == "lose") {
 
         data.status = 'lose';
-        fetch('/api/set-cookie/wordle_status/' + encodeURIComponent(JSON.stringify(data)));
+        fetch('/api/set-cookie/wordle_status_' + game_id + '/' + encodeURIComponent(JSON.stringify(data)));
 
         alert("Game Over! You've run out of tries!");
 
@@ -97,19 +97,15 @@ async function checkGuess() {
         data.status = 'playing';
         data.guesses.push(guess);
 
-        fetch('/api/set-cookie/wordle_status/' + encodeURIComponent(JSON.stringify(data)));
+        fetch('/api/set-cookie/wordle_status_' + game_id + '/' + encodeURIComponent(JSON.stringify(data)));
 
         for (let i = 0; i < 5; i++) {
             let letterInput = getNextInput(currentRow, i + 1);
             let letter = guess[i];
 
-            Object.entries(response.keyboard).forEach(([key, stat]) => {
-                if (letter) {
-                    if (stat !== "default" && key === letter) {
-                        letterInput.classList.add(stat);
-                    }
-                }
-            });
+            if (letter) {
+                letterInput.classList.add(response.guess[i]);
+            }
         }
 
         updateKeyboard(response.keyboard);
@@ -212,7 +208,7 @@ function continueGame(guesses, tries) {
 
 document.addEventListener("DOMContentLoaded", async function() {
 
-    const json = await fetch('/api/get-cookie/wordle_status/');
+    const json = await fetch('/api/get-cookie/wordle_status_' + game_id + '/');
     const response = await json.json();
 
     if (response.status == "playing") {
